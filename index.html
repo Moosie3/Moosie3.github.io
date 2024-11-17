@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marquee Menu - Pinball Vault</title>
+    <style>
+        /* Same CSS as in your PHP file */
+        body {
+            background-color: #2e2e2e;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #333;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        /* Add your full CSS here */
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo-title">
+            <div class="logo">
+                <a href="https://www.ebay.co.uk/usr/tranceinyapantz" target="_blank" rel="noopener noreferrer">
+                    <img src="images/ebay.png" alt="Ebay">
+                </a>
+            </div>
+            <div class="title">Pinball Vault</div>
+        </div>
+        <div>
+            <button onclick="alert('Contact Form Coming Soon!')" class="contact-button">Contact Me</button>
+            <button onclick="toggleAdminMode()" id="admin-btn" class="login-button">Enable Admin Mode</button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="marquee-grid" id="marquee-grid">
+            <!-- Marquee items will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        // Simulate marquee data
+        const marquees = [
+            {
+                title: "Marquee 1",
+                thumbnail: "images/marqueedefaultplaceholder.png",
+                description: "Description of Marquee 1",
+                ebay_link: "https://www.ebay.com",
+                availability: "Available",
+                price: "100"
+            },
+            {
+                title: "Marquee 2",
+                thumbnail: "images/marqueedefaultplaceholder.png",
+                description: "Description of Marquee 2",
+                ebay_link: "https://www.ebay.com",
+                availability: "Out of Stock",
+                price: "200"
+            }
+        ];
+
+        let adminMode = false;
+
+        // Toggle admin mode
+        function toggleAdminMode() {
+            adminMode = !adminMode;
+            document.getElementById('admin-btn').textContent = adminMode ? "Disable Admin Mode" : "Enable Admin Mode";
+            loadMarquees();
+        }
+
+        // Load marquees into the grid
+        function loadMarquees() {
+            const grid = document.getElementById("marquee-grid");
+            grid.innerHTML = ""; // Clear existing content
+
+            if (marquees.length === 0) {
+                grid.innerHTML = `<div class="marquee-item"><p>No marquees found.</p></div>`;
+                return;
+            }
+
+            marquees.forEach((marquee) => {
+                const item = document.createElement("div");
+                item.className = "marquee-item";
+                item.innerHTML = `
+                    <a href="${marquee.thumbnail}" target="_blank">
+                        <img src="${marquee.thumbnail}" alt="${marquee.title}">
+                    </a>
+                    <div class="info">
+                        <a href="${marquee.ebay_link}" class="title" target="_blank" rel="noopener noreferrer">
+                            ${marquee.title}
+                        </a>
+                        <div class="description">${marquee.description}</div>
+                        <div class="${marquee.availability === 'Available' ? 'available' : 'out-of-stock'}">
+                            ${marquee.availability}
+                        </div>
+                        <div>Price: £${marquee.price}</div>
+                    </div>
+                    ${adminMode ? `
+                        <button onclick="deleteMarquee('${marquee.title}')" style="background-color: #f44336; color: #fff; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px;">Delete</button>
+                    ` : ''}
+                `;
+                grid.appendChild(item);
+            });
+        }
+
+        // Delete marquee (simulate)
+        function deleteMarquee(title) {
+            const index = marquees.findIndex(m => m.title === title);
+            if (index !== -1) {
+                marquees.splice(index, 1);
+                loadMarquees();
+            }
+        }
+
+        // Initial load
+        loadMarquees();
+    </script>
+</body>
+</html>
